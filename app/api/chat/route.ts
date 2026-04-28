@@ -1,37 +1,60 @@
 import prisma from "@/lib/prisma"
-import { chunkText } from "@/utils/chunk"
 import { Context } from "@/utils/context"
-import { NextResponse } from "next/server"
+import { getChunks } from "@/utils/get-context"
+import { NextRequest, NextResponse } from "next/server"
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
-    const chunks = chunkText(body.content)
+    console.log("get query embedding...", body.query)
 
-    for (const chunk of chunks) {
-      const value = await Context(chunk)
+    const queryEmbedding = await Context(body.query)
 
-      const document = await prisma.documentChunk.create({
-        data: {
-          content: chunk,
+    if (!queryEmbedding?.embeddings) {
+      console.log("no query embedding found")
+      return NextResponse.json(
+        {
+          message: "no query embedding found",
         },
-      })
-
-      if (!value?.embeddings || !document) {
-        throw new Error("No document found")
-      }
-
-      await prisma.$executeRaw`
-       UPDATE "DocumentChunk"
-       SET embedding = ${value.embeddings[0].values}::vector
-       WHERE id = ${document.id}
-      `
+        {
+          status: 400,
+        }
+      )
     }
 
+    const matches = await prisma.$queryRaw<{ content: string }[]>`
+      SELECT content
+      FROM "DocumentChunk"
+      ORDER BY embedding <=> ${queryEmbedding.embeddings[0].values}::vector
+      LIMIT 3
+    `
+
+    if (!matches.length) {
+      return NextResponse.json(
+        {
+          message: "no matches found",
+        },
+        {
+          status: 400,
+        }
+      )
+    }
+
+    const context = matches.map((x) => x.content).join("\n")
+
+    const result = getChunks(body.query, context)
+
+    console.log("reach here /api/chat/chat", {
+      context: context,
+      body: body.query,
+      result: result,
+      queryEmbedding: queryEmbedding.embeddings[0].values?.slice(0, 500),
+      queryEmbeddingLength: queryEmbedding.embeddings[0].values?.length,
+    })
+
     return NextResponse.json({
-      message: "Stored successfully",
-      chunks: chunks.length,
+      result: result,
     })
   } catch (error) {
     return NextResponse.json(

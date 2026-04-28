@@ -1,4 +1,4 @@
-import { createEmbedding } from "@/llm/embedding"
+import { createEmbedding } from "@/lib/llm/embedding"
 
 export async function Context(text: string) {
   try {

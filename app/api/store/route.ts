@@ -3,12 +3,16 @@ import { chunkText } from "@/utils/chunk"
 import { Context } from "@/utils/context"
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const body = await req.json()
 
     const chunks = chunkText(body.content)
 
+    console.log("reach here /api/chat/store", {
+      chunks: chunks,
+      body: body.content,
+    })
     for (const chunk of chunks) {
       const value = await Context(chunk)
 

@@ -7,7 +7,7 @@ export default function Page() {
   const [input, setInput] = useState<string>("")
   async function handleSubmit() {
     try {
-      const response = await fetch("http://localhost:3000/api/store", {
+      const response = await fetch("http://localhost:3000/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
