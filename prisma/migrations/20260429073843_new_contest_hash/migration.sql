@@ -1,0 +1,17 @@
+/*
+  Warnings:
+
+  - A unique constraint covering the columns `[contentHash]` on the table `DocumentChunk` will be added. If there are existing duplicate values, this will fail.
+
+*/
+-- AlterTable
+ALTER TABLE "DocumentChunk" ADD COLUMN     "contentHash" TEXT;
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DocumentChunk_contentHash_key" ON "DocumentChunk"("contentHash");
+
+
+CREATE EXTENSION IF NOT EXISTS vector;
+
+ALTER TABLE "DocumentChunk"
+ADD COLUMN embedding vector(1536);

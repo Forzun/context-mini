@@ -9,7 +9,6 @@ export async function createEmbedding(text: string) {
     const response = await ai.models.embedContent({
       model: "gemini-embedding-2",
       contents: text,
-      config: { outputDimensionality: 1536 },
     })
 
     if (!response) {

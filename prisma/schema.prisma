@@ -8,8 +8,9 @@ datasource db {
 }
 
 model DocumentChunk {
-  id        String   @id @default(uuid())
-  content   String
-  metadata  Json?
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  content     String
+  contentHash String?  @unique
+  metadata    Json?
+  createdAt   DateTime @default(now())
 }

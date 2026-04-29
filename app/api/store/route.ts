@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma"
 import { chunkText } from "@/utils/chunk"
 import { Context } from "@/utils/context"
+import { hashText } from "@/utils/hash"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
@@ -13,16 +14,24 @@ export async function POST(req: Request) {
       chunks: chunks,
       body: body.content,
     })
-    for (const chunk of chunks) {
-      const value = await Context(chunk)
 
-      const document = await prisma.documentChunk.create({
-        data: {
-          content: chunk,
+    for (const chunk of chunks) {
+      const contentHash = hashText(chunk)
+
+      const hashExist = await prisma.documentChunk.findUnique({
+        where: {
+          contentHash: contentHash,
         },
       })
 
-      if (!value?.embeddings || !value.embeddings[0] || !document) {
+      if (hashExist) {
+        console.log("Document already exists")
+        continue
+      }
+
+      const value = await Context(chunk)
+
+      if (!value?.embeddings || !value.embeddings[0]) {
         throw new Error("No document found")
       }
 
@@ -31,6 +40,13 @@ export async function POST(req: Request) {
       if (!embedding?.length) {
         throw new Error("Embedding missing")
       }
+
+      const document = await prisma.documentChunk.create({
+        data: {
+          content: chunk,
+          contentHash: contentHash,
+        },
+      })
 
       const vectorString = `[${embedding.join(",")}]`
 

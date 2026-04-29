@@ -73,6 +73,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const DocumentChunkScalarFieldEnum = {
   id: 'id',
   content: 'content',
+  contentHash: 'contentHash',
   metadata: 'metadata',
   createdAt: 'createdAt'
 } as const
