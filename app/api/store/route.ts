@@ -16,11 +16,11 @@ export async function POST(req: Request) {
     })
 
     for (const chunk of chunks) {
-      const contentHash = hashText(chunk)
+      const hash = hashText(chunk)
 
       const hashExist = await prisma.documentChunk.findUnique({
         where: {
-          contentHash: contentHash,
+          contentHash: hash,
         },
       })
 
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       const document = await prisma.documentChunk.create({
         data: {
           content: chunk,
-          contentHash: contentHash,
+          contentHash: hash,
         },
       })
 

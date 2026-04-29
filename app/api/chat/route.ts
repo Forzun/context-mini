@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma"
 import { Context } from "@/utils/context"
 import { getChunks } from "@/utils/get-context"
 import { NextRequest, NextResponse } from "next/server"
-import { match } from "node:assert/strict"
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,11 +31,15 @@ export async function POST(req: NextRequest) {
 
     const vectorString = `[${embedding.join(",")}]`
 
-    const matches = await prisma.$queryRaw<{ content: string }[]>`
-    SELECT content
-    FROM "DocumentChunk"
-    ORDER BY embedding <=> ${vectorString}::vector
-    LIMIT 3
+    const matches = await prisma.$queryRaw<
+      { content: string; similarity: number }[]
+    >`
+      SELECT
+       content,
+       1 - (embedding <=> ${vectorString}::vector) as similarity
+      FROM "DocumentChunk"
+      ORDER BY embedding <=> ${vectorString}::vector
+      LIMIT 3
     `
 
     if (!matches.length) {
@@ -50,12 +53,15 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    console.log("matches found:", matches)
+
     const context = matches.map((x) => x.content).join("\n")
 
     const result = await getChunks(body.query, context)
 
     console.log("reach here /api/chat/chat", {
       context: context,
+      similarity: matches,
       body: body.query,
       result: result,
       queryEmbedding: queryEmbedding.embeddings[0].values?.slice(0, 500),
