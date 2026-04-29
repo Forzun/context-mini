@@ -68,8 +68,19 @@ export async function POST(req: NextRequest) {
       queryEmbeddingLength: queryEmbedding.embeddings[0].values?.length,
     })
 
+    const trace = {
+      chunksRetrieved: matches.length,
+      topSimilarity: matches[0]?.similarity || 0,
+      embeddingModel: process.env.EMBEDDING_MODE || "gemini-embedding",
+    }
+
     return NextResponse.json({
+      context: context,
+      body: body.query,
       result: result,
+      trace: trace,
+      queryEmbedding: queryEmbedding.embeddings[0].values?.slice(0, 500),
+      queryEmbeddingLength: queryEmbedding.embeddings[0].values?.length,
     })
   } catch (error) {
     return NextResponse.json(

@@ -7,6 +7,7 @@ import { NextResponse } from "next/server"
 export async function POST(req: Request) {
   try {
     const body = await req.json()
+    let skipped = 0
 
     const chunks = chunkText(body.content)
 
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
 
       if (hashExist) {
         console.log("Document already exists")
+        skipped++
         continue
       }
 
@@ -60,6 +62,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       message: "Stored successfully",
       chunks: chunks.length,
+      skipped: skipped,
     })
   } catch (error) {
     return NextResponse.json(
