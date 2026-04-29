@@ -5,6 +5,9 @@ import { useState } from "react"
 
 export default function Page() {
   const [input, setInput] = useState<string>("")
+  const [data, setData] = useState([])
+
+  console.log("llm data ask here..:", data)
   async function handleSubmit() {
     try {
       const response = await fetch("http://localhost:3000/api/chat", {
@@ -13,10 +16,11 @@ export default function Page() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          content: input,
+          query: input,
         }),
       })
       const data = await response.json()
+      setData(data)
       console.log("chat data:", data)
     } catch (error) {
       console.error(error)
@@ -34,6 +38,7 @@ export default function Page() {
         />
         <Button onClick={handleSubmit}>Send</Button>
       </div>
+      data:
     </div>
   )
 }

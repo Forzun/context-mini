@@ -9,7 +9,7 @@ export async function contextRouter(question: string, context: string) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "nousresearch/hermes-3-llama-3.1-405b:free",
+          model: "google/gemma-3n-e2b-it:free",
           messages: [
             {
               role: "user",
@@ -33,6 +33,7 @@ export async function contextRouter(question: string, context: string) {
     )
 
     if (response) {
+      console.log("llm response", response)
       const data = await response.json()
       console.log(data.choices[0].message.content)
       return data.choices[0].message.content

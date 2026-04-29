@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma"
 import { Context } from "@/utils/context"
 import { getChunks } from "@/utils/get-context"
 import { NextRequest, NextResponse } from "next/server"
+import { match } from "node:assert/strict"
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,11 +24,19 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const embedding = queryEmbedding.embeddings[0].values
+
+    if (!embedding?.length) {
+      throw new Error("No embedding found")
+    }
+
+    const vectorString = `[${embedding.join(",")}]`
+
     const matches = await prisma.$queryRaw<{ content: string }[]>`
-      SELECT content
-      FROM "DocumentChunk"
-      ORDER BY embedding <=> ${queryEmbedding.embeddings[0].values}::vector
-      LIMIT 3
+    SELECT content
+    FROM "DocumentChunk"
+    ORDER BY embedding <=> ${vectorString}::vector
+    LIMIT 3
     `
 
     if (!matches.length) {
@@ -43,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     const context = matches.map((x) => x.content).join("\n")
 
-    const result = getChunks(body.query, context)
+    const result = await getChunks(body.query, context)
 
     console.log("reach here /api/chat/chat", {
       context: context,

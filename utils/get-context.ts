@@ -14,6 +14,9 @@ export async function getChunks(question: string, context: string) {
         chunksRetrieved: 3,
         embeddingModel: "gemini-embedding-2",
       },
+      sources: {
+        context,
+      },
     }
   } catch (error) {
     console.error("Error fetching chunks:", error)

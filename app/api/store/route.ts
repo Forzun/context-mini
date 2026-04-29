@@ -22,14 +22,22 @@ export async function POST(req: Request) {
         },
       })
 
-      if (!value?.embeddings || !document) {
+      if (!value?.embeddings || !value.embeddings[0] || !document) {
         throw new Error("No document found")
       }
 
+      const embedding = value.embeddings?.[0]?.values
+
+      if (!embedding?.length) {
+        throw new Error("Embedding missing")
+      }
+
+      const vectorString = `[${embedding.join(",")}]`
+
       await prisma.$executeRaw`
-       UPDATE "DocumentChunk"
-       SET embedding = ${value.embeddings[0].values}::vector
-       WHERE id = ${document.id}
+      UPDATE "DocumentChunk"
+      SET embedding = ${vectorString}::vector
+      WHERE id = ${document.id}
       `
     }
 
