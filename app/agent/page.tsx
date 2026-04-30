@@ -11,9 +11,8 @@ export default function Dashboard() {
     <div className="relative h-screen w-full overflow-hidden bg-background">
       <AnimatedBackground />
 
-      {/* Main content */}
       <div className="relative z-10 flex h-full gap-4 p-4">
-        <div className="flex w-1/4 min-w-0 flex-col rounded-xl border border-border/40 bg-card/50 p-4 backdrop-blur-sm">
+        <div className="no-scrollbar flex w-1/4 min-w-0 flex-col rounded-xl border border-border/40 bg-card/50 p-4 backdrop-blur-sm">
           <LeftSidebar />
         </div>
 

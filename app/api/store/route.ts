@@ -3,6 +3,7 @@ import { chunkText } from "@/utils/chunk"
 import { Context } from "@/utils/context"
 import { hashText } from "@/utils/hash"
 import { NextResponse } from "next/server"
+import { activeLogs } from "@/data"
 
 export async function POST(req: Request) {
   try {
@@ -16,6 +17,19 @@ export async function POST(req: Request) {
       body: body.content,
     })
 
+    activeLogs.push(
+      {
+        timestamp: new Date().toTimeString().split(" ")[0],
+        message: `Query received: ${body.context}`,
+        type: "info",
+      },
+      {
+        timestamp: new Date().toTimeString().split(" ")[0],
+        message: `Found ${chunks.length} chunks`,
+        type: "success",
+      }
+    )
+
     for (const chunk of chunks) {
       const hash = hashText(chunk)
 
@@ -28,6 +42,11 @@ export async function POST(req: Request) {
       if (hashExist) {
         console.log("Document already exists")
         skipped++
+        activeLogs.push({
+          timestamp: new Date().toTimeString().split(" ")[0],
+          message: `Duplicate detected in ${chunk.length}, ${skipped}`,
+          type: "info",
+        })
         continue
       }
 
@@ -59,10 +78,17 @@ export async function POST(req: Request) {
       `
     }
 
+    activeLogs.push({
+      timestamp: new Date().toTimeString().split(" ")[0],
+      message: "Vector store sync completed",
+      type: "success",
+    })
+
     return NextResponse.json({
       message: "Stored successfully",
       chunks: chunks.length,
       skipped: skipped,
+      activeLogs: activeLogs,
     })
   } catch (error) {
     return NextResponse.json(

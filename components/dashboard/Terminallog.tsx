@@ -42,7 +42,7 @@ export function TerminalLog({
 }: TerminalLogProps) {
   return (
     <div
-      className={`${maxHeight} overflow-y-auto rounded-xl border border-border/40 bg-black/20 p-4 font-mono text-sm backdrop-blur-sm`}
+      className={`${maxHeight} no-scrollbar overflow-y-auto rounded-xl border border-border/40 bg-black/20 p-4 font-mono text-sm backdrop-blur-sm`}
     >
       <div className="space-y-1">
         {entries.map((entry, index) => (

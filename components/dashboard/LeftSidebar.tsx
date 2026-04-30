@@ -12,8 +12,7 @@ export function LeftSidebar() {
   const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-y-auto pr-2">
-      {/* Header */}
+    <div className="no-scrollbar flex h-full flex-col gap-4 overflow-y-auto pr-2">
       <div>
         <h2 className="text-lg font-bold text-foreground">Knowledge Base</h2>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -21,7 +20,6 @@ export function LeftSidebar() {
         </p>
       </div>
 
-      {/* Drag and drop area */}
       <motion.div
         whileHover={{ borderColor: "rgba(59, 130, 246, 0.4)" }}
         onDragEnter={() => setIsDragging(true)}
@@ -49,16 +47,21 @@ export function LeftSidebar() {
         />
       </motion.div>
 
-      {/* Ingest button */}
       <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
         <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
           Ingest Documents
         </Button>
       </motion.div>
 
-      {/* Stats grid */}
-      <div>
+      <div className="relative">
         <h3 className="mb-2 text-xs font-semibold tracking-wider text-foreground uppercase">
+          Activity
+        </h3>
+        <TerminalLog entries={activityLog} maxHeight="flex-1 min-h-0" />
+      </div>
+
+      <div className="relative">
+        <h3 className="text-xs font-semibold tracking-wider text-foreground uppercase">
           Stats
         </h3>
         <div className="grid grid-cols-2 gap-2">
@@ -71,14 +74,6 @@ export function LeftSidebar() {
             />
           ))}
         </div>
-      </div>
-
-      {/* Activity log */}
-      <div className="flex min-h-0 flex-1 flex-col">
-        <h3 className="mb-2 text-xs font-semibold tracking-wider text-foreground uppercase">
-          Activity
-        </h3>
-        <TerminalLog entries={activityLog} maxHeight="flex-1 min-h-0" />
       </div>
     </div>
   )
