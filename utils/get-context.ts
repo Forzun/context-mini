@@ -10,10 +10,6 @@ export async function getChunks(question: string, context: string) {
 
     return {
       answer: response,
-      trace: {
-        chunksRetrieved: 3,
-        embeddingModel: "gemini-embedding-2",
-      },
       sources: {
         context,
       },

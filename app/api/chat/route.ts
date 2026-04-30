@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
       chunksRetrieved: matches.length,
       topSimilarity: matches[0]?.similarity || 0,
       embeddingModel: process.env.EMBEDDING_MODE || "gemini-embedding",
+      chunks: matches,
     }
 
     return NextResponse.json({
