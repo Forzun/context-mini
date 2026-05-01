@@ -7,7 +7,7 @@ import { RightSidebar } from "@/components/dashboard/RightSidebar"
 import { useQuery } from "@/hooks/use-query"
 
 export default function Dashboard() {
-  const { queryResult } = useQuery()
+  const { queryResult, getContext } = useQuery()
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-background">
