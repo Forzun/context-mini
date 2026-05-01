@@ -3,13 +3,12 @@ import { chunkText } from "@/utils/chunk"
 import { Context } from "@/utils/context"
 import { hashText } from "@/utils/hash"
 import { NextResponse } from "next/server"
-import { activeLogs } from "@/data"
+import { activeLogs, getStats } from "@/data"
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
     let skipped = 0
-
     const chunks = chunkText(body.content)
 
     console.log("reach here /api/chat/store", {
@@ -78,17 +77,30 @@ export async function POST(req: Request) {
       `
     }
 
-    activeLogs.push({
-      timestamp: new Date().toTimeString().split(" ")[0],
-      message: "Vector store sync completed",
-      type: "success",
-    })
+    activeLogs.push(
+      {
+        timestamp: new Date().toTimeString().split(" ")[0],
+        message: "Vector store sync completed",
+        type: "success",
+      },
+      {
+        timestamp: new Date().toTimeString().split(" ")[0],
+        message: "Query received from user",
+        type: "info",
+      }
+    )
+    const stats = getStats(
+      chunks,
+      skipped,
+      process.env.EMBEDDING_MODE as string
+    )
 
     return NextResponse.json({
       message: "Stored successfully",
       chunks: chunks.length,
       skipped: skipped,
       activeLogs: activeLogs,
+      stats: stats,
     })
   } catch (error) {
     return NextResponse.json(
