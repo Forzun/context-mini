@@ -53,13 +53,17 @@ export function LeftSidebar() {
           </div>
         </div>
         <textarea
+          onChange={(e) => setContent(e.target.value)}
           placeholder="Paste your knowledge documents, PDFs, or text content here..."
           className="h-32 w-full resize-none rounded-lg border border-border/40 bg-background/50 p-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 focus:outline-none"
         />
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-        <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
+        <Button
+          onClick={handleSubmit}
+          className="w-full bg-blue-600 text-white hover:bg-blue-700"
+        >
           Ingest Documents
         </Button>
       </motion.div>

@@ -1,6 +1,9 @@
+import { chunks, getKnowledgeChunks, getTrace } from "@/data"
 import prisma from "@/lib/prisma"
+import { ExecutionTraceEntry } from "@/types"
 import { Context } from "@/utils/context"
 import { getChunks } from "@/utils/get-context"
+import { match } from "assert/strict"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
@@ -59,6 +62,17 @@ export async function POST(req: NextRequest) {
 
     const result = await getChunks(body.query, context)
 
+    if (!result) {
+      return NextResponse.json(
+        {
+          message: "no result found",
+        },
+        {
+          status: 500,
+        }
+      )
+    }
+
     console.log("reach here /api/chat/chat", {
       context: context,
       similarity: matches,
@@ -68,22 +82,20 @@ export async function POST(req: NextRequest) {
       queryEmbeddingLength: queryEmbedding.embeddings[0].values?.length,
     })
 
-    const trace = {
-      query: body.query,
-      embeddingModel: process.env.EMBEDDING_MODE || "gemini-embedding",
-      dimensions: "Query embedding computed (1536 dimensions)",
-      chunksRetrieved: matches.length,
-      topSimilarity: matches[0]?.similarity || 0,
-      chunks: matches,
-    }
+    const trace = getTrace(body.query, matches)
+    console.log("trace:", trace)
+
+    const chunks = getKnowledgeChunks(matches)
 
     return NextResponse.json({
       context: context,
-      body: body.query,
-      result: result,
+      query: body.query,
+      answer: result.answer,
+      chunks: chunks,
+      confidence: matches[0]?.similarity || 0,
+      grounded: true,
+      topMatch: `${matches[0].content.slice(0, 15)}...`,
       trace: trace,
-      queryEmbedding: queryEmbedding.embeddings[0].values?.slice(0, 500),
-      queryEmbeddingLength: queryEmbedding.embeddings[0].values?.length,
     })
   } catch (error) {
     return NextResponse.json(

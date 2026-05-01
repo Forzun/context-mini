@@ -1,6 +1,16 @@
 import { contextRouter } from "./open-router"
 
-export async function getChunks(question: string, context: string) {
+interface GetChunksResult {
+  answer: string
+  sources: {
+    context: string
+  }
+}
+
+export async function getChunks(
+  question: string,
+  context: string
+): Promise<GetChunksResult | null> {
   try {
     const response = await contextRouter(question, context)
 
@@ -16,6 +26,6 @@ export async function getChunks(question: string, context: string) {
     }
   } catch (error) {
     console.error("Error fetching chunks:", error)
-    return error
+    return null
   }
 }

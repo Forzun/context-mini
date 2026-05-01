@@ -1,7 +1,6 @@
 "use client"
 
 import { TerminalLog } from "./Terminallog"
-import { GlowingCard } from "./GlowingCard"
 import { ExecutionTraceEntry } from "@/types"
 import { motion } from "framer-motion"
 
@@ -22,7 +21,6 @@ export function RightSidebar({
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto pl-2">
-      {/* Header */}
       <div>
         <h2 className="text-lg font-bold text-foreground">Observability</h2>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -30,9 +28,7 @@ export function RightSidebar({
         </p>
       </div>
 
-      {/* Status cards */}
       <div className="space-y-2">
-        {/* Confidence Score */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           className="rounded-lg border border-green-500/30 bg-green-500/5 p-3 backdrop-blur-sm"
@@ -55,7 +51,6 @@ export function RightSidebar({
           </div>
         </motion.div>
 
-        {/* Top Similarity */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           className="rounded-lg border border-blue-500/30 bg-blue-500/5 p-3 backdrop-blur-sm"
@@ -71,7 +66,6 @@ export function RightSidebar({
           </div>
         </motion.div>
 
-        {/* Grounding Status */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           className={`rounded-lg border p-3 backdrop-blur-sm ${
@@ -96,7 +90,6 @@ export function RightSidebar({
         </motion.div>
       </div>
 
-      {/* Execution trace */}
       <div className="flex min-h-0 flex-1 flex-col">
         <h3 className="mb-2 text-xs font-semibold tracking-wider text-foreground uppercase">
           Trace

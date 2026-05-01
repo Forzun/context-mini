@@ -4,9 +4,11 @@ import { AnimatedBackground } from "@/components/dashboard/AnimatedBackground"
 import { LeftSidebar } from "@/components/dashboard/LeftSidebar"
 import { CenterPanel } from "@/components/dashboard/CenterPanel"
 import { RightSidebar } from "@/components/dashboard/RightSidebar"
-import { mockQueryResult } from "@/lib/mockData"
+import { useQuery } from "@/hooks/use-query"
 
 export default function Dashboard() {
+  const { queryResult } = useQuery()
+
   return (
     <div className="relative h-screen w-full overflow-hidden bg-background">
       <AnimatedBackground />
@@ -17,16 +19,18 @@ export default function Dashboard() {
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col rounded-xl border border-border/40 bg-card/50 p-4 backdrop-blur-sm">
-          <CenterPanel result={mockQueryResult} />
+          <CenterPanel />
         </div>
 
         <div className="flex w-1/4 min-w-0 flex-col rounded-xl border border-border/40 bg-card/50 p-4 backdrop-blur-sm">
-          <RightSidebar
-            confidence={mockQueryResult.confidence}
-            topMatch={mockQueryResult.topMatch}
-            grounded={mockQueryResult.grounded}
-            trace={mockQueryResult.trace}
-          />
+          {queryResult && (
+            <RightSidebar
+              confidence={queryResult?.confidence}
+              topMatch={queryResult?.topMatch}
+              grounded={queryResult?.grounded}
+              trace={queryResult?.trace}
+            />
+          )}
         </div>
       </div>
     </div>

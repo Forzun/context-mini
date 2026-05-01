@@ -1,5 +1,5 @@
 export interface KnowledgeChunk {
-  id: string
+  id?: string
   content: string
   similarity: number
   source: string
