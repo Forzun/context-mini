@@ -69,9 +69,11 @@ export async function POST(req: NextRequest) {
     })
 
     const trace = {
+      query: body.query,
+      embeddingModel: process.env.EMBEDDING_MODE || "gemini-embedding",
+      dimensions: "Query embedding computed (1536 dimensions)",
       chunksRetrieved: matches.length,
       topSimilarity: matches[0]?.similarity || 0,
-      embeddingModel: process.env.EMBEDDING_MODE || "gemini-embedding",
       chunks: matches,
     }
 

@@ -7,9 +7,20 @@ import { leftPanelStats, activityLog } from "@/lib/mockData"
 import { Upload } from "lucide-react"
 import { motion } from "framer-motion"
 import { useState } from "react"
+import useContext from "@/hooks/use-context"
 
 export function LeftSidebar() {
   const [isDragging, setIsDragging] = useState(false)
+  const [content, setContent] = useState("")
+  const { activity, stats, sendContext, loading } = useContext()
+
+  const handleSubmit = async () => {
+    if (!content) {
+      alert("please enter a context document")
+      return
+    }
+    await sendContext(content)
+  }
 
   return (
     <div className="no-scrollbar flex h-full flex-col gap-4 overflow-y-auto pr-2">
@@ -57,7 +68,9 @@ export function LeftSidebar() {
         <h3 className="mb-2 text-xs font-semibold tracking-wider text-foreground uppercase">
           Activity
         </h3>
-        <TerminalLog entries={activityLog} maxHeight="flex-1 min-h-0" />
+        {activity && (
+          <TerminalLog entries={activity} maxHeight="flex-1 min-h-0" />
+        )}
       </div>
 
       <div className="relative">
@@ -65,13 +78,8 @@ export function LeftSidebar() {
           Stats
         </h3>
         <div className="grid grid-cols-2 gap-2">
-          {leftPanelStats.map((stat, idx) => (
-            <GlowingCard
-              key={idx}
-              label={stat.label}
-              value={stat.value}
-              unit={stat.unit}
-            />
+          {stats.map((stat, idx) => (
+            <GlowingCard key={idx} label={stat.label} value={stat.value} />
           ))}
         </div>
       </div>

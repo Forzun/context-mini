@@ -22,7 +22,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto px-2">
-      {/* Header */}
       <div>
         <h2 className="text-lg font-bold text-foreground">Query Workspace</h2>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -30,7 +29,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
         </p>
       </div>
 
-      {/* Query input section - sticky */}
       <div className="sticky top-0 space-y-2 bg-background/80 pb-2 backdrop-blur-sm">
         <div className="flex gap-2">
           <input
@@ -48,7 +46,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
         </div>
       </div>
 
-      {/* Answer section */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -65,7 +62,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
         </p>
       </motion.div>
 
-      {/* Evidence section */}
       <div>
         <h3 className="mb-3 text-sm font-semibold text-foreground">
           Evidence ({result.chunks.length} chunks)
@@ -77,7 +73,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
         </div>
       </div>
 
-      {/* Expandable inspect retrieval section */}
       <Accordion className="w-full">
         <AccordionItem value="inspect" className="border-border/40">
           <AccordionTrigger className="text-sm font-medium text-foreground hover:text-foreground/80 hover:no-underline">
@@ -87,7 +82,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
             </div>
           </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-4">
-            {/* Retrieved Context */}
             <div>
               <h4 className="mb-2 text-xs font-semibold tracking-wider text-foreground uppercase">
                 Retrieved Context
@@ -104,7 +98,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
               </div>
             </div>
 
-            {/* Prompt used */}
             <div>
               <h4 className="mb-2 text-xs font-semibold tracking-wider text-foreground uppercase">
                 Final Prompt
@@ -149,7 +142,6 @@ export function CenterPanel({ result }: CenterPanelProps) {
         </AccordionItem>
       </Accordion>
 
-      {/* Spacer */}
       <div className="h-4" />
     </div>
   )

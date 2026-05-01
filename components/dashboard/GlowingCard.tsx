@@ -9,12 +9,7 @@ interface GlowingCardProps {
   glow?: boolean
 }
 
-export function GlowingCard({
-  label,
-  value,
-  unit,
-  glow = false,
-}: GlowingCardProps) {
+export function GlowingCard({ label, value, glow = false }: GlowingCardProps) {
   return (
     <motion.div
       whileHover={glow ? { scale: 1.02 } : undefined}
@@ -29,7 +24,6 @@ export function GlowingCard({
       </div>
       <div className="mt-2 flex items-baseline gap-1">
         <div className="text-2xl font-bold text-foreground">{value}</div>
-        {unit && <div className="text-xs text-muted-foreground">{unit}</div>}
       </div>
     </motion.div>
   )

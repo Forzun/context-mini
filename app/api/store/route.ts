@@ -67,7 +67,6 @@ export async function POST(req: Request) {
           contentHash: hash,
         },
       })
-
       const vectorString = `[${embedding.join(",")}]`
 
       await prisma.$executeRaw`
@@ -77,6 +76,7 @@ export async function POST(req: Request) {
       `
     }
 
+    const chunkIndex = await prisma.documentChunk.count()
     activeLogs.push(
       {
         timestamp: new Date().toTimeString().split(" ")[0],
@@ -90,7 +90,7 @@ export async function POST(req: Request) {
       }
     )
     const stats = getStats(
-      chunks,
+      chunkIndex,
       skipped,
       process.env.EMBEDDING_MODE as string
     )
