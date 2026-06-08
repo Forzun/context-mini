@@ -1,22 +1,2 @@
-# Next.js template
-
 Visit [Notion](https://app.notion.com/p/ContextMini-3551d5a4b28680f38041fc9bd68d80d8) see more stuff
-This is a Next.js template with shadcn/ui.
-
-## Adding components
-
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+Visit [video](https://drive.google.com/file/d/1TKoBfJH-gnFORx5KauDDUiCukslsuKPq/view) 
