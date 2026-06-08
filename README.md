@@ -1,7 +1,6 @@
 # Next.js template
 
-Visit [Notion](https://app.notion.com/p/ContextMini-3551d5a4b28680f38041fc9bd68d80d8) to learn programming.
-
+Visit [Notion](https://app.notion.com/p/ContextMini-3551d5a4b28680f38041fc9bd68d80d8) see more stuff
 This is a Next.js template with shadcn/ui.
 
 ## Adding components
